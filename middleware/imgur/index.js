@@ -23,7 +23,7 @@ module.exports = (req, res, next) => {
 
         console.log('telegram file api response: ', body)
 
-        const image_url = 'https://api.telegram.org/file/bot' + process.env.TELEGRAM_API_TOKEN + body.file_path
+        const image_url = 'https://api.telegram.org/file/bot' + process.env.TELEGRAM_API_TOKEN + '/' + body.file_path
 
         // We need to get the actual image to look at exif gps data
         let image_file = rpn(image_url, {encoding: 'binary'}).then(body => {
