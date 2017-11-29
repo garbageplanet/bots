@@ -15,73 +15,61 @@ module.exports = (req, res, next) => {
 
     // TODO check req.body.message.is_bot
 
-    rpn({ method: 'POST',
-        uri: 'https://api.telegram.org/bot' + process.env.TELEGRAM_API_TOKEN + '/getFile?file_id=' + req.body.message.document.file_id
-    })
+    console.log('telegram file api response: ', body)
 
-    .then((body) => {
+    const image_url = 'https://api.telegram.org/file/bot' + process.env.TELEGRAM_API_TOKEN + '/' + req.body.message.document.file_path
 
-        console.log('telegram file api response: ', body)
+    console.log('full image url', image_url)
 
-        const image_url = 'https://api.telegram.org/file/bot' + process.env.TELEGRAM_API_TOKEN + '/' + body.result.file_path
+    // We need to get the actual image to look at exif gps data
+    let image_file = rpn(image_url, {encoding: 'binary'}).then(body => {
 
-        console.log('full image url', image_url)
+        console.log('Fetched image file', body)
 
-        // We need to get the actual image to look at exif gps data
-        let image_file = rpn(image_url, {encoding: 'binary'}).then(body => {
+        try {
 
-            console.log('Fetched image file', body)
+            new ExifImage({ image : body }, (error, exifdata) => {
 
-            try {
+                if (error) {
+                  console.log('Error getting exif data' + error.message)
+                  return res.end()
 
-                new ExifImage({ image : body }, (error, exifdata) => {
+                } else {
+                  // Add the exif data to the res
+                  console.log('Extracted image metadata', exifdata)
 
-                    if (error) {
-                      console.log('Error getting exif data' + error.message)
-                      return res.end()
+                  try {
+                    res.local.exif = exifdata.gps
 
-                    } else {
-                      // Add the exif data to the res
-                      console.log('Extracted image metadata', exifdata)
+                  } catch (err) {
+                    console.log('No exif data', err)
+                    res.end()
+                  }
+                }
+            })
 
-                      try {
-                        res.local.exif = exifdata.gps
-
-                      } catch (err) {
-                        console.log('No exif data', err)
-                        res.end()
-                      }
-                    }
-                })
-
-            } catch (error) {
-                console.log('Error: ' + error.message)
-                return res.end()
-            }
-
-        }).catch(err =>{
-          console.log('Failed to retrieve image from Telegram API', err)
-          return res.end()
-        })
-
-        // Then we upload to imgur directly with the lin to telegram api file
-        imgur.uploadUrl(image_url).then(response => {
-
-            console.log('imgur upload api response', response)
-
-            res.locals.imgur_url = response.data.link
-            return next()
-
-          })
-          .catch(err => {
-            console.error('Failed to upload to imgur', err.message)
+        } catch (error) {
+            console.log('Error: ' + error.message)
             return res.end()
-          })
+        }
+
+    }).catch(err =>{
+      console.log('Failed to retrieve image from Telegram API', err)
+      return res.end()
     })
 
-    .catch((err) => {
-      // Auth failed
-      console.log('Failed telegram file api', err)
-      res.end()
-    })
+    // Then we upload to imgur directly with the lin to telegram api file
+    imgur.uploadUrl(image_url).then(response => {
+
+        console.log('imgur upload api response', response)
+
+        res.locals.imgur_url = response.data.link
+        return next()
+
+      })
+      .catch(err => {
+        console.error('Failed to upload to imgur', err.message)
+        return res.end()
+      })
+
 }
