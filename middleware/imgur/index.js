@@ -20,7 +20,7 @@ module.exports = (req, res, next) => {
     })
 
     .then((body) => {
-      
+
         console.log('telegram file api response: ', body)
 
         const image_url = 'https://api.telegram.org/file/bot' + process.env.TELEGRAM_API_TOKEN + body.file_path
@@ -81,5 +81,5 @@ module.exports = (req, res, next) => {
       // Auth failed
       console.log('Failed telegram file api', err)
       res.end()
+    })
 }
-})
