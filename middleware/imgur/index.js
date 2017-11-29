@@ -11,17 +11,16 @@ imgur.setCredentials(process.env.IMGUR_EMAIL, process.env.IMGUR_PWD, process.env
 // The fucking promised hell
 module.exports = (req, res, next) => {
 
-  console.log('hit image middleware: ', req.body)
+    console.log('hit image middleware: ', req.body)
 
-  let last_image = req.body.message.photo.slice(-1)[0]
-
-  if ( last_image || last_image !== null || last_image.length > 0 ) {
+    // TODO check req.body.message.is_bot
 
     rpn({ method: 'POST',
-        uri: 'https://api.telegram.org/bot' + process.env.TELEGRAM_API_TOKEN + '/getFile?file_id=' + last_image.file_id
+        uri: 'https://api.telegram.org/bot' + process.env.TELEGRAM_API_TOKEN + '/getFile?file_id=' + req.body.message.document.file_id
     })
 
     .then((body) => {
+      
         console.log('telegram file api response: ', body)
 
         const image_url = 'https://api.telegram.org/file/bot' + process.env.TELEGRAM_API_TOKEN + body.file_path
@@ -82,10 +81,5 @@ module.exports = (req, res, next) => {
       // Auth failed
       console.log('Failed telegram file api', err)
       res.end()
-    })
-
-  } else {
-
-    res.sendStatus(500)
-  }
 }
+})
