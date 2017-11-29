@@ -17,10 +17,7 @@ botmaster.addBot(telegramBot)
 
 module.exports = (req, res, next) => {
 
-  let lastimage = req.body.message.photo.slice(-1)[0]
   let chatid    = req.body.message.chat.id
-
-  console.log('last image', JSON.stringify(lastimage))
 
   let saved = async () => {
     return await savetodb()
