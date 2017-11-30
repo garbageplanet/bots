@@ -41,7 +41,7 @@ module.exports = (req, res, next) => {
 
             console.log('Fetched image file')
 
-            exif.read(body)
+            fastexif.read(body)
                 .then(info => {
                     console.log('exif info', info)
                 })
