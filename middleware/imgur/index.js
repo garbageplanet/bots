@@ -15,9 +15,7 @@ module.exports = (req, res, next) => {
 
     // TODO check req.body.message.is_bot
 
-    console.log('telegram file api response: ', body)
-
-    const image_url = 'https://api.telegram.org/file/bot' + process.env.TELEGRAM_API_TOKEN + '/' + req.body.message.document.file_path
+    let image_url = 'https://api.telegram.org/file/bot' + process.env.TELEGRAM_API_TOKEN + '/' + req.body.message.document.file_path
 
     console.log('full image url', image_url)
 
