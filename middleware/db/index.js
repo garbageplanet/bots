@@ -2,17 +2,9 @@ require('dotenv').config()
 
 const rpn = require('request-promise-native')
 
-/*
- *
- * For now we leverage our own backend app to save to the db
- * which gives us out of the box postgres, auth, postgis as well as
- * writing datapoint options to the other tables besides /garbages
- *
- */
-
 module.exports = () => {
 
-    return new Promise ( function(resolve, reject) {
+    return new Promise ( function (resolve, reject) {
 
         rpn({ method: 'POST',
                uri: 'https://' + process.env.APP_WEB_URL + ':' + process.env.APP_WEB_PORT + '/api/authenticate'
@@ -33,7 +25,7 @@ module.exports = () => {
             }
 
             let options = {
-                  url: process.env.APP_URL + '/api/trashes'
+                  url: 'https://' +  process.env.APP_WEB_URL + ':' + process.env.APP_WEB_PORT + '/api/trashes'
                 , method: 'POST'
                 , headers: headers
                 , body: {

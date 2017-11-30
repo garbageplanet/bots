@@ -12,7 +12,9 @@ module.exports = (req, res, next) => {
     console.log('hit imgur middleware: ', req.body)
 
     // Then we upload to imgur directly with the lin to telegram api file
-    imgur.uploadUrl(res.locals.image_url).then(response => {
+    imgur.uploadUrl(res.locals.image_url)
+
+    .then(response => {
 
         console.log('imgur upload api response', response)
 
@@ -20,7 +22,8 @@ module.exports = (req, res, next) => {
         return next()
 
       })
-      .catch(err => {
+
+    .catch(err => {
         console.error('Failed to upload to imgur', err.message)
         return res.end()
       })
