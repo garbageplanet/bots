@@ -26,7 +26,7 @@ module.exports = (req, res, next) => {
 
         console.log('telegram file api response: ', body)
 
-        const image_url = 'https://api.telegram.org/file/bot' + process.env.TELEGRAM_API_TOKEN + '/' + req.body.message.document.file_path
+        const image_url = 'https://api.telegram.org/file/bot' + process.env.TELEGRAM_API_TOKEN + '/' + req.body.results.file_path
 
         console.log('full image url', image_url)
 
