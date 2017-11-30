@@ -1,21 +1,41 @@
-const express = require('express')
-const path = require('path')
-const logger = require('morgan')
+const express      = require('express')
+const path         = require('path')
+const logger       = require('morgan')
 const cookieParser = require('cookie-parser')
-const bodyParser = require('body-parser')
-
-const index = require('./routes/index')
-
-const app = express()
+const bodyParser   = require('body-parser')
+const csp          = require('helmet-csp')
+const index        = require('./routes/index')
+const app          = express()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
+app.set('trust proxy', '127.0.0.1')
 
+app.use(compression())
 app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
+app.use(csp({
+  directives: {
+      defaultSrc: [  "'self'"
+                   , 'https://api.telegram.org'
+                  ]
+
+    , connectSrc: [  "'self'"
+                  , 'http://127.0.0.1:7000'
+                  , 'https://' + process.env.APP_WEB_URL
+                  , 'https://api.telegram.org'
+                ]
+
+    , scriptSrc: [  "'self'" ]
+
+    , imgSrc: [  "'self'"
+               , 'https://api.telegram.org'
+            ]
+  }
+}))
 
 app.use('/bots', index)
 
