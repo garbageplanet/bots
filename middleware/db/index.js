@@ -38,7 +38,7 @@ module.exports = () => {
                 , headers: headers
                 , body: {
                     'image_url' : res.locals.imgur_url
-                  , 'latlng'    : res.locals.exif.latlng
+                  , 'latlng'    : res.locals.latlng
                   , 'todo'      : 1
                   , 'amount'    : 3
                   , 'type'      : 'robot'

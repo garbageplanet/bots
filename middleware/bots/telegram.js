@@ -17,21 +17,24 @@ botmaster.addBot(telegramBot)
 
 module.exports = (req, res, next) => {
 
-  let chatid    = req.body.message.chat.id
+  // Save to app backend
+  let saved = savetodb()
 
-  let saved = async () => {
-    return await savetodb()
-  }
+      saved.then(result => {
 
-  console.log('saved db data:', saved)
-  // build share url here
+          console.log('Saved db data:', result)
+          // TODO build share url here
 
-  const shareable_url = 'https://garbagepla.net/show/' + saved.id
+          const shareable_url = 'https://garbagepla.net/show/' + result.id
+          const message       = { text: 'Shareable url for the feature you just created: ' +  shareable_url }
 
-  const message = {
-    text: 'Shareable url for the feature you just created: ' +  shareable_url
-  }
+          telegramBot.sendMessageTo(message, req.body.message.from.id)
 
-  telegramBot.sendMessageTo(message, req.body.message.from.id);
+      })
+
+      saved.catch(err=>{
+        console.log('Failed to save to db', err)
+        res.end()
+      })
 
 }
