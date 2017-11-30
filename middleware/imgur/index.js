@@ -22,7 +22,7 @@ module.exports = (req, res, next) => {
     // We need to get the actual image to look at exif gps data
     let image_file = rpn(image_url, {encoding: 'binary'}).then(body => {
 
-        console.log('Fetched image file', body)
+        console.log('Success fetching image file')
 
         try {
 
@@ -37,6 +37,7 @@ module.exports = (req, res, next) => {
                   console.log('Extracted image metadata', exifdata)
 
                   try {
+                    console.log('Exif GPS data: ', exifdata.gps)
                     res.local.exif = exifdata.gps
 
                   } catch (err) {
