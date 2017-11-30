@@ -15,7 +15,7 @@ module.exports = () => {
     return new Promise ( function(resolve, reject) {
 
         rpn({ method: 'POST',
-               uri: 'https://' + process.env.APP_WEB_URL + process.env.APP_WEB_PORT + '/api/authenticate'
+               uri: 'https://' + process.env.APP_WEB_URL + ':' + process.env.APP_WEB_PORT + '/api/authenticate'
              , data: {
                 email    : process.env.APP_EMAIL
               , password : process.env.APP_MDP
