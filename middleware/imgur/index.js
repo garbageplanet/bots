@@ -36,13 +36,13 @@ module.exports = (req, res, next) => {
         // We need to get the actual image to look at exif gps data
         // TODO try out 'image-headers'
 
-        let image_file = rpn(image_url, {encoding: null}).then((body, buffer) => {
+        let image_file = rpn(image_url, {encoding: null}).then((body) => {
 
             console.log('Fetched image file')
 
             try {
 
-                new ExifImage({ image : buffer }, (error, exifdata) => {
+                new ExifImage({ image : body }, (error, exifdata) => {
 
                     if (error) {
                       console.log('Error getting exif data: ' + error.message)
