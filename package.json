@@ -27,6 +27,7 @@
     "botmaster-messenger": "^1.0.2",
     "botmaster-telegram": "^1.0.0",
     "botmaster-twitter-dm": "^1.0.0",
+    "compression": "^1.7.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.0",
     "dotenv": "^4.0.0",
