@@ -3,6 +3,7 @@ require('dotenv').config()
 const rpn       = require('request-promise-native')
 const imgur     = require('imgur')
 const ExifImage = require('exif').ExifImage
+// const ImageHeaders = require('image-headers')
 
 imgur.setClientId(process.env.IMGUR_CLIENT_ID)
 imgur.setAPIUrl(process.env.IMGUR_API_URL)
@@ -33,21 +34,23 @@ module.exports = (req, res, next) => {
         console.log('full image url', image_url)
 
         // We need to get the actual image to look at exif gps data
-        let image_file = rpn(image_url, {encoding: 'binary'}).then(body => {
+        // TODO try out 'image-headers'
 
-            console.log('Fetched image file', body)
+        let image_file = rpn(image_url, {encoding: null}).then((body, buffer) => {
+
+            console.log('Fetched image file')
 
             try {
 
-                new ExifImage({ image : body }, (error, exifdata) => {
+                new ExifImage({ image : buffer }, (error, exifdata) => {
 
                     if (error) {
-                      console.log('Error getting exif data' + error.message)
+                      console.log('Error getting exif data: ' + error.message)
                       return res.end()
 
                     } else {
                       // Add the exif data to the res
-                      console.log('Extracted image metadata', exifdata)
+                      console.log('Extracted image metadata: ', exifdata)
 
                       try {
                         res.local.exif = exifdata.gps

@@ -34,6 +34,7 @@
     "express": "~4.14.1",
     "express-session": "^1.15.6",
     "express-validator": "^4.3.0",
+    "image-headers": "^0.3.3",
     "imgur": "^0.2.1",
     "morgan": "~1.7.0",
     "pg-promise": "^7.3.2",
