@@ -12,6 +12,12 @@ module.exports = (req, res, next) => {
 
     console.log('hit image middleware: ', req.body)
 
+    if (!req.body.message.document) {
+      console.log('No doc in message')
+      telegramBot.sendMessageTo('Sorry, you must send me an image as a document so I can get the exif info.', req.body.message.from.id)
+      return res.sendStatus(200).end()
+    }
+
     // TODO check req.body.message.is_bot
     const file_id = 'https://api.telegram.org/bot' + process.env.TELEGRAM_API_TOKEN + '/getFile?file_id=' + req.body.message.document.file_id
 
