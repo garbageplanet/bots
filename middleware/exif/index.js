@@ -4,6 +4,8 @@ const path        = require('path')
 const rpn         = require('request-promise-native')
 const ExifImage   = require('exif').ExifImage
 const telegramBot = require(path.join(__dirname,'./../bots/telegram.js'))
+const dms2dec     = require('dms2dec')
+
 // const ImageHeaders = require('image-headers')
 // const fastExif = require('fast-exif')
 
@@ -14,7 +16,7 @@ module.exports = (req, res, next) => {
 
     if (!req.body.message.document) {
       console.log('No doc in message')
-      telegramBot.sendMessageTo({text:'Sorry, you must send me an image as a document so I can get the exif info.'}, req.body.message.from.id)
+      telegramBot.sendMessageTo({text:'Sorry, you must send me an image as a document so I can get the exif info. Also make usre'}, req.body.message.from.id)
       return res.sendStatus(200).end()
     }
 
@@ -42,7 +44,9 @@ module.exports = (req, res, next) => {
         // We need to get the actual image to look at exif gps data
         // TODO try out 'image-headers' or 'fast-exifä so we don't need to get the whole image
 
-        let image_file = rpn(image_url, {encoding: null}).then((body) => {
+        let image_file = rpn(image_url, {encoding: null})
+
+        .then((body) => {
 
             console.log('Fetched image file')
 
@@ -59,7 +63,6 @@ module.exports = (req, res, next) => {
                   console.log('Extracted image metadata: ', exifdata)
 
                   try {
-                    // Process GPS data and convert coordinates
                     // gps:
                     // { ...,
                     //   GPSLatitudeRef: 'N',
@@ -69,16 +72,19 @@ module.exports = (req, res, next) => {
                     //   ...
                     // }
 
-                    // Hacky for testing, need to convert the degrees seconds to decimal degrees
-                    //lat = exifdata.gps.GPSLatitude[0] + ( ( parseInt(exifdata.gps.GPSLatitude[1]) / 60 ) + ( parseFloat(exifdata.gps.GPSLatitude[2]) /3600) )
-                    let lat = exifdata.gps.GPSLatitude[0] + ',' + exifdata.gps.GPSLatitude[1] + exifdata.gps.GPSLatitude[2]
-                    let lng = exifdata.gps.GPSLongitude[0] + ',' + exifdata.gps.GPSLongitude[1] + exifdata.gps.GPSLongitude[2]
+                    if (!exifdata.gps) {
+                      telegramBot.sendMessageTo({text:'YOu must enable geolocation in your device so I can read the geographical coordinates from your photos.'}, req.body.message.from.id)
+                      return res.sendStatus(200).end()
+                    }
+
+                    // Convert GPS data from exif into decimal coordinates
+                    let dc = dms2dec( exifdata.gps.GPSLatitude, exifdata.gps.GPSLatitudeRef, exifdata.gps.GPSLongitude, exifdata.gps.GPSLongitudeRef)
 
                     let latlng = []
-                    latlng.push(lat)
-                    latlng.push(lng)
+                        latlng.push(dc[0])
+                        latlng.push(dc[1])
 
-                    console.log('latlngs', latlng)
+                    console.log('latlngs: ', JSON.stringify(latlng))
 
                     res.locals.latlng = latlng
 
@@ -93,9 +99,9 @@ module.exports = (req, res, next) => {
                 }
             })
 
+        })
 
-
-        }).catch(err =>{
+        .catch(err =>{
           console.log('Failed to retrieve image from Telegram API', err)
 
           telegramBot.sendMessageTo({text:'Sorry, there was a problem retrieving your image.'}, req.body.message.from.id)
@@ -104,8 +110,8 @@ module.exports = (req, res, next) => {
     })
 
     .catch((err) => {
-      // Auth failed
       console.log('Failed telegram file api', err)
+
       telegramBot.sendMessageTo({text:'Sorry, there was a problem retrieving your image.'}, req.body.message.from.id)
       return res.sendStatus(200).end()
     })

@@ -25,7 +25,7 @@ module.exports = (req, res, next) => {
 
         console.log('Failed to save to db', err.message)
 
-        telegramBot.sendMessageTo({text:'Sorry, something went wrong'}, req.body.message.from.id)
+        telegramBot.sendMessageTo({text:'Sorry, something went wrong while saving your photo.'}, req.body.message.from.id)
         res.sendStatus(200).end()
       })
 }
