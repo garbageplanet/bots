@@ -30,10 +30,14 @@ module.exports = (req, res, next) => {
 
           telegramBot.sendMessageTo(message, req.body.message.from.id)
 
+          res.sendStatus(200)
+
       })
 
       .catch(err=>{
         console.log('Failed to save to db', err)
-        res.end()
+        res.sendStatus(200)
       })
+
+      res.sendStatus(200)
 }
