@@ -14,7 +14,7 @@ module.exports = (req, res, next) => {
 
     if (!req.body.message.document) {
       console.log('No doc in message')
-      telegramBot.sendMessageTo('Sorry, you must send me an image as a document so I can get the exif info.', req.body.message.from.id)
+      telegramBot.sendMessageTo({text:'Sorry, you must send me an image as a document so I can get the exif info.'}, req.body.message.from.id)
       return res.sendStatus(200).end()
     }
 
@@ -51,7 +51,7 @@ module.exports = (req, res, next) => {
                 if (error) {
                   console.log('Error getting exif data: ' + error.message)
 
-                  telegramBot.sendMessageTo('Sorry, I could not parse the exif data, did you send a jpeg?', req.body.message.from.id)
+                  telegramBot.sendMessageTo({text:'Sorry, I could not parse the exif data, did you send a jpeg?'}, req.body.message.from.id)
                   return res.sendStatus(200).end()
 
                 } else {
@@ -87,7 +87,7 @@ module.exports = (req, res, next) => {
                   } catch (err) {
                     console.log('No exif data: ', err)
 
-                    telegramBot.sendMessageTo('Sorry, the exif data is empty', req.body.message.from.id)
+                    telegramBot.sendMessageTo({text:'Sorry, the exif data is empty'}, req.body.message.from.id)
                     return res.sendStatus(200).end()
                   }
                 }
@@ -98,7 +98,7 @@ module.exports = (req, res, next) => {
         }).catch(err =>{
           console.log('Failed to retrieve image from Telegram API', err)
 
-          telegramBot.sendMessageTo('Sorry, there was a problem retrieving your image.', req.body.message.from.id)
+          telegramBot.sendMessageTo({text:'Sorry, there was a problem retrieving your image.'}, req.body.message.from.id)
           return res.sendStatus(200).end()
         })
     })
@@ -106,7 +106,7 @@ module.exports = (req, res, next) => {
     .catch((err) => {
       // Auth failed
       console.log('Failed telegram file api', err)
-      telegramBot.sendMessageTo('Sorry, there was a problem retrieving your image.', req.body.message.from.id)
+      telegramBot.sendMessageTo({text:'Sorry, there was a problem retrieving your image.'}, req.body.message.from.id)
       return res.sendStatus(200).end()
     })
 }
