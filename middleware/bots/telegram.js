@@ -20,7 +20,7 @@ module.exports = (req, res, next) => {
   // Save to app backend
   savetodb()
 
-      then(result => {
+      .then(result => {
 
           console.log('Saved db data:', result)
           // TODO build share url here
