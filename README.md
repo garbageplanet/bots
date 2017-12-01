@@ -1,5 +1,6 @@
 # bots bots bots, always bots
 <kbd>Messaging bots for garbagepla.net</kbd>
+[![Known Vulnerabilities](https://snyk.io/test/github/garbageplanet/bots/badge.svg)](https://snyk.io/test/github/garbageplanet/bots)
 
 ## Telegram
 Add `@litter_bot` to your contact list and send a geotagged jpeg photos to add it directly to the map at [garbagepla.net][5e71e578]
