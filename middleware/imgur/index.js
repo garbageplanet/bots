@@ -1,6 +1,8 @@
 require('dotenv').config()
 
-const imgur     = require('imgur')
+const path        = require('path')
+const imgur       = require('imgur')
+const telegramBot = require(path.join(__dirname,'./../bots/telegram.js'))
 
 imgur.setClientId(process.env.IMGUR_CLIENT_ID)
 imgur.setAPIUrl(process.env.IMGUR_API_URL)
@@ -25,6 +27,8 @@ module.exports = (req, res, next) => {
 
     .catch(err => {
         console.error('Failed to upload to imgur', err.message)
-        return res.end()
+
+        telegramBot.sendMessageTo('Sorry, failed to upload your image to storage', req.body.message.from.id)
+        return res.sendStatus(200).end()
       })
 }

@@ -1,7 +1,9 @@
 require('dotenv').config()
 
-const rpn       = require('request-promise-native')
-const ExifImage = require('exif').ExifImage
+const path        = require('path')
+const rpn         = require('request-promise-native')
+const ExifImage   = require('exif').ExifImage
+const telegramBot = require(path.join(__dirname,'./../bots/telegram.js'))
 // const ImageHeaders = require('image-headers')
 // const fastExif = require('fast-exif')
 
@@ -38,73 +40,67 @@ module.exports = (req, res, next) => {
 
             console.log('Fetched image file')
 
-            // fastExif.read(body)
-            //     .then(info => {
-            //         console.log('exif info', info)
-            //     })
-            //     .catch(err => {
-            //         console.log(err)
-            //     })
+            new ExifImage({ image : body }, (error, exifdata) => {
 
-            try {
+                if (error) {
+                  console.log('Error getting exif data: ' + error.message)
 
-                new ExifImage({ image : body }, (error, exifdata) => {
+                  telegramBot.sendMessageTo('Sorry, I could not parse the exif data, did you send a jpeg?', req.body.message.from.id)
+                  return res.sendStatus(200).end()
 
-                    if (error) {
-                      console.log('Error getting exif data: ' + error.message)
-                      return res.end()
+                } else {
+                  // Add the exif data to the res
+                  console.log('Extracted image metadata: ', exifdata)
 
-                    } else {
-                      // Add the exif data to the res
-                      console.log('Extracted image metadata: ', exifdata)
+                  try {
+                    // Process GPS data and convert coordinates
+                    // gps:
+                    // { ...,
+                    //   GPSLatitudeRef: 'N',
+                    //   GPSLatitude: [ 60, 9, 11.802 ],
+                    //   GPSLongitudeRef: 'E',
+                    //   GPSLongitude: [ 24, 55, 33.4304 ],
+                    //   ...
+                    // }
 
-                      try {
-                        // Process GPS data and convert coordinates
-                        // gps:
-                        // { ...,
-                        //   GPSLatitudeRef: 'N',
-                        //   GPSLatitude: [ 60, 9, 11.802 ],
-                        //   GPSLongitudeRef: 'E',
-                        //   GPSLongitude: [ 24, 55, 33.4304 ],
-                        //   ...
-                        // }
+                    // Hacky for testing, need to convert the degrees seconds to decimal degrees
+                    //lat = exifdata.gps.GPSLatitude[0] + ( ( parseInt(exifdata.gps.GPSLatitude[1]) / 60 ) + ( parseFloat(exifdata.gps.GPSLatitude[2]) /3600) )
+                    let lat = exifdata.gps.GPSLatitude[0] + ',' + exifdata.gps.GPSLatitude[1] + exifdata.gps.GPSLatitude[2]
+                    let lng = exifdata.gps.GPSLongitude[0] + ',' + exifdata.gps.GPSLongitude[1] + exifdata.gps.GPSLongitude[2]
 
-                        // Hacky for testing, need to convert the degrees seconds to decimal degrees
-                        //lat = exifdata.gps.GPSLatitude[0] + ( ( parseInt(exifdata.gps.GPSLatitude[1]) / 60 ) + ( parseFloat(exifdata.gps.GPSLatitude[2]) /3600) )
-                        let lat = exifdata.gps.GPSLatitude[0] + ',' + exifdata.gps.GPSLatitude[1] + exifdata.gps.GPSLatitude[2]
-                        let lng = exifdata.gps.GPSLongitude[0] + ',' + exifdata.gps.GPSLongitude[1] + exifdata.gps.GPSLongitude[2]
+                    let latlng = []
+                    latlng.push(lat)
+                    latlng.push(lng)
 
-                        let latlng = []
-                        latlng.push(lat)
-                        latlng.push(lng)
+                    console.log('latlngs', latlng)
 
-                        console.log('latlngs', latlng)
+                    res.locals.latlng = latlng
 
-                        res.locals.latlng = latlng
+                    return next()
 
-                        return next()
+                  } catch (err) {
+                    console.log('No exif data: ', err)
 
-                      } catch (err) {
-                        console.log('No exif data', err)
-                        res.end()
-                      }
-                    }
-                })
+                    telegramBot.sendMessageTo('Sorry, the exif data is empty', req.body.message.from.id)
+                    return res.sendStatus(200).end()
+                  }
+                }
+            })
 
-            } catch (error) {
-                console.log('Error: ' + error.message)
-                return res.end()
-            }
+
 
         }).catch(err =>{
           console.log('Failed to retrieve image from Telegram API', err)
-          return res.end()
+
+          telegramBot.sendMessageTo('Sorry, there was a problem retrieving your image.', req.body.message.from.id)
+          return res.sendStatus(200).end()
         })
     })
 
     .catch((err) => {
       // Auth failed
       console.log('Failed telegram file api', err)
-      res.end()
+      telegramBot.sendMessageTo('Sorry, there was a problem retrieving your image.', req.body.message.from.id)
+      return res.sendStatus(200).end()
     })
 }
