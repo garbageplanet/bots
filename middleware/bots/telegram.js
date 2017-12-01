@@ -18,9 +18,9 @@ botmaster.addBot(telegramBot)
 module.exports = (req, res, next) => {
 
   // Save to app backend
-  let saved = savetodb()
+  savetodb()
 
-      saved.then(result => {
+      then(result => {
 
           console.log('Saved db data:', result)
           // TODO build share url here
@@ -32,9 +32,8 @@ module.exports = (req, res, next) => {
 
       })
 
-      saved.catch(err=>{
+      .catch(err=>{
         console.log('Failed to save to db', err)
         res.end()
       })
-
 }
