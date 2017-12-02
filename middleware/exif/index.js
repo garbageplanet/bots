@@ -13,6 +13,12 @@ module.exports = (req, res, next) => {
 
     console.log('hit image middleware: ', req.body)
 
+    if ( req.body.message.from.is_bot === true ) {
+
+      let error = new Error('We don\'t serve your kind here.')
+      return next(error)
+    }
+
     if ( !req.body.message.document ) {
 
       console.log('Image not sent as file.')
