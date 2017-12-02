@@ -83,7 +83,7 @@ module.exports = (req, res, next) => {
                       //
                       // console.log('latlngs: ', JSON.stringify(latlng))
 
-                      res.locals.latlng = latlng
+                      // res.locals.latlng = latlng
 
                       res.locals.latlng = dc[0] + ',' + dc[1]
 
