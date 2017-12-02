@@ -5,6 +5,8 @@ const rpn         = require('request-promise-native')
 const ExifImage   = require('exif').ExifImage
 const telegramBot = require(path.join(__dirname,'./../bots/telegram.js'))
 const dms2dec     = require('dms2dec')
+const colors      = require('colors')
+
 
 // const ImageHeaders = require('image-headers')
 // const fastExif = require('fast-exif')
@@ -15,7 +17,8 @@ module.exports = (req, res, next) => {
     console.log('hit image middleware: ', req.body)
 
     if ( !req.body.message.document ) {
-      console.log('No doc in message')
+      console.log('Error - no document in message'.inverse)
+
       telegramBot.sendMessageTo({text:'You must send me an image as a document so I can get the exif info.'}, req.body.message.from.id)
       return res.sendStatus(200).end()
     }
@@ -53,7 +56,7 @@ module.exports = (req, res, next) => {
             new ExifImage({ image : body }, (error, exifdata) => {
 
                 if ( error ) {
-                  console.log('Error getting exif data: ' + error.message)
+                  console.log('Error getting exif data'.inverse, error.message)
 
                   telegramBot.sendMessageTo({text:'I could not parse the exif data, did you send a jpeg?'}, req.body.message.from.id)
                   return res.sendStatus(200).end()
@@ -91,7 +94,7 @@ module.exports = (req, res, next) => {
                     return next()
 
                   } catch (err) {
-                    console.log('No exif data: ', err)
+                    console.log('No exif data'.inverse, err)
 
                     telegramBot.sendMessageTo({text:'The exif data is empty'}, req.body.message.from.id)
                     return res.sendStatus(200).end()
@@ -101,7 +104,7 @@ module.exports = (req, res, next) => {
         })
 
         .catch(err =>{
-          console.log('Failed to retrieve image from Telegram API', err)
+          console.log('Failed to retrieve image from Telegram API'.inverse, err)
 
           telegramBot.sendMessageTo({text:'There was a problem retrieving your image.'}, req.body.message.from.id)
           return res.sendStatus(200).end()
@@ -109,7 +112,7 @@ module.exports = (req, res, next) => {
     })
 
     .catch((err) => {
-      console.log('Failed telegram file api', err)
+      console.log('Failed telegram file api'.inverse, err)
 
       telegramBot.sendMessageTo({text:'There was a problem retrieving your image.'}, req.body.message.from.id)
       return res.sendStatus(200).end()

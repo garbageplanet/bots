@@ -1,14 +1,17 @@
-require('dotenv').config()
-
-const rpn = require('request-promise-native')
+               require('dotenv').config()
+const colors = require('colors')
+const rpn    = require('request-promise-native')
 
 module.exports = () => {
 
+    // TODO http auth on application
+    // see https://laravel.com/docs/5.5/authentication#http-basic-authentication
+
     return new Promise ( function (resolve, reject) {
 
-        rpn({ method: 'POST',
-               uri: 'https://' + process.env.APP_WEB_URL + ':' + process.env.APP_WEB_PORT + '/api/authenticate'
-             , data: {
+        rpn({  method: 'POST',
+               url: 'https://' + process.env.APP_WEB_URL + ':' + process.env.APP_WEB_PORT + '/api/authenticate'
+             , formData: {
                 email    : process.env.APP_EMAIL
               , password : process.env.APP_MDP
             }
@@ -16,7 +19,7 @@ module.exports = () => {
 
         .then((body) => {
 
-            console.log('api auth response: ', body)
+            console.log('Api auth response: ', body)
 
             let headers = {
                 'User-Agent'    : 'nodejs express bots/0.0.1'
@@ -28,7 +31,7 @@ module.exports = () => {
                   url: 'https://' +  process.env.APP_WEB_URL + ':' + process.env.APP_WEB_PORT + '/api/trashes'
                 , method: 'POST'
                 , headers: headers
-                , body: {
+                , formData: {
                     'image_url' : res.locals.imgur_url
                   , 'latlng'    : res.locals.latlng
                   , 'todo'      : 1
@@ -41,20 +44,20 @@ module.exports = () => {
 
             .then((response) => {
               // Success we can return the api response
-              console.log('api post success', response)
+              console.log('Api post success', response)
               resolve(response)
             })
 
             .catch(err => {
               // Failed to post to API
-              console.log('failed to post data to api', err)
+              console.log('Failed to post data to api'.inverse, err)
               reject(err)
             })
         })
 
         .catch((err) => {
           // Auth failed
-          console.log('Failed API auth', err)
+          console.log('Failed api auth'.inverse, err)
           reject(err)
         })
     })
