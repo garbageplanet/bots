@@ -57,8 +57,6 @@ module.exports = (req, res, next) => {
 
                 } else {
                   // Add the exif data to the res
-                  console.log('Extracted image metadata: ', exifdata)
-
                   try {
                       // gps:
                       // { ...,
@@ -73,6 +71,8 @@ module.exports = (req, res, next) => {
                         let error = new Error('Enable geolocation in your device so I can read the geographical coordinates from your photos.')
                         return next(error)
                       }
+
+                      console.log('Extracted image gps metadata: ', exifdata.gps)
 
                       // Convert GPS data from exif into decimal coordinates
                       let dc = dms2dec( exifdata.gps.GPSLatitude, exifdata.gps.GPSLatitudeRef, exifdata.gps.GPSLongitude, exifdata.gps.GPSLongitudeRef)
