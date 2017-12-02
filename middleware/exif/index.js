@@ -16,7 +16,7 @@ module.exports = (req, res, next) => {
     if ( !req.body.message.document ) {
 
       console.log('Image not sent as file.')
-      let error = new Error('You must send me the image as a file and not a photo')
+      let error = new Error('You must send me an image file . Make sur to attach it as a file and not as a photo.')
       return next(error)
     }
 
@@ -77,13 +77,15 @@ module.exports = (req, res, next) => {
                       // Convert GPS data from exif into decimal coordinates
                       let dc = dms2dec( exifdata.gps.GPSLatitude, exifdata.gps.GPSLatitudeRef, exifdata.gps.GPSLongitude, exifdata.gps.GPSLongitudeRef)
 
-                      let latlng = []
-                          latlng.push(dc[0])
-                          latlng.push(dc[1])
-
-                      console.log('latlngs: ', JSON.stringify(latlng))
+                      // let latlng = []
+                      //     latlng.push(dc[0])
+                      //     latlng.push(dc[1])
+                      //
+                      // console.log('latlngs: ', JSON.stringify(latlng))
 
                       res.locals.latlng = latlng
+
+                      res.locals.latlng = dc[0] + ',' + dc[1]
 
                       return next()
 
