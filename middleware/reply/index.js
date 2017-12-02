@@ -15,7 +15,7 @@ module.exports = (req, res) => {
     } catch (err) {
 
       console.log('Error in reply.js:', err)
-      let error = new Error('Something went wrong')
+      let error = new Error('Something went wrong. My bad.')
       return next(error)
     }
 }
