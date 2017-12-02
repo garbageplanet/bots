@@ -54,7 +54,7 @@ app.use(function(err, req, res, next) {
 
   if ( !err.status || err.status !==403 ) {
 
-    telegramBot.sendMessageTo({text: err.message}, req.body.message.from_id)
+    telegramBot.sendMessageTo({text: err.message}, req.body.message.from.id)
     res.sendStatus(200).end()
 
   } else {

@@ -15,10 +15,12 @@ module.exports = (req, res, next) => {
 
         console.log('Api auth response: ', body)
 
+        let parsedbody = JSON.parse(body)
+
         let headers = {
             'User-Agent'    : 'nodejs express bots/0.0.1'
           , 'Content-Type'  : 'application/json'
-          , 'Authorization' : 'Bearer ' + body.token
+          , 'Authorization' : 'Bearer ' + parsedbody.token
         }
 
         let options = {
