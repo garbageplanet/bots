@@ -85,7 +85,7 @@ module.exports = (req, res, next) => {
 
                       // res.locals.latlng = latlng
 
-                      res.locals.latlng = dc[0] + ',' + dc[1]
+                      res.locals.latlng = dc[0] + ', ' + dc[1]
 
                       return next()
 
