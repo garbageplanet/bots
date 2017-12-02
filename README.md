@@ -15,3 +15,7 @@ _in preparation_
 _waiting for whatsapp public api_
 
   [5e71e578]: https://garbagepla.net "Garbagepla.net"
+
+## Todo
+
+ - Create simple marker by sharing location with the bot

@@ -1,31 +1,21 @@
-
 const path        = require('path')
 const telegramBot = require(path.join(__dirname,'./../bots/telegram.js'))
 const savetodb    = require(path.join(__dirname,'./../db'))
 
-module.exports = (req, res, next) => {
+module.exports = (req, res) => {
 
-  // Save to app backend
-  savetodb()
+    try {
 
-      .then(result => {
+      let shareable_url = 'https://garbagepla.net/show/' + res.locals.result_id
+      let message       = { text: 'Shareable url for the feature you just created: ' +  shareable_url }
 
-          console.log('Saved db data:', result)
-          // TODO build share url here
+      telegramBot.sendMessageTo(message, req.body.message.from.id)
+      return res.sendStatus(200).end()
 
-          const shareable_url = 'https://garbagepla.net/show/' + result.id
-          const message       = { text: 'Shareable url for the feature you just created: ' +  shareable_url }
+    } catch (err) {
 
-          telegramBot.sendMessageTo(message, req.body.message.from.id)
-          res.sendStatus(200).end()
-
-      })
-
-      .catch(err=>{
-
-        console.log('Failed to save to db', err.message)
-
-        telegramBot.sendMessageTo({text:'Something went wrong while saving your photo, my bad.'}, req.body.message.from.id)
-        res.sendStatus(200).end()
-      })
+      console.log('Error in reply.js:', err)
+      let error = new Error('Something went wrong')
+      return next(error)
+    }
 }

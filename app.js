@@ -1,3 +1,4 @@
+                     require('dotenv').config()
 const express      = require('express')
 const path         = require('path')
 const compression = require('compression')
@@ -7,6 +8,7 @@ const bodyParser   = require('body-parser')
 const csp          = require('helmet-csp')
 const index        = require('./routes/index')
 const app          = express()
+const telegramBot  = require(path.join(__dirname,'./middleware/bots/telegram.js'))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -42,19 +44,24 @@ app.use('/bots', index)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Forbidden')
+  let err = new Error('Forbidden')
   err.status = 403
   next(err)
 })
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message
-  res.locals.error = req.app.get('env') === 'development' ? err : {}
 
-  // render the error page
-  res.sendStatus(err.status || 500)
+  if ( !err.status || err.status !==403 ) {
+
+    telegramBot.sendMessageTo({text: err.message}, req.body.message.from_id)
+    res.sendStatus(200).end()
+
+  } else {
+
+    res.sendStatus(err.status).end()
+  }
+
 })
 
 console.log('Bots app started on port 7000')
