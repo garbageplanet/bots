@@ -17,7 +17,10 @@ module.exports = (req, res, next) => {
     .then(response => {
 
         console.log('imgur upload api response', response)
-        res.locals.imgur_url = response.data.link
+        // ouch, the backend/fontend bugs with https
+        let link = response.data.link
+        let httplink = link.replace('https','http')
+        res.locals.imgur_url = httplink
         return next()
 
       })
