@@ -41,7 +41,7 @@ module.exports = (req, res, next) => {
         .then((response) => {
           console.log('Api post success', response)
           // Pass the saved feature id to the locals
-          res.locals.feature_id = response.data.data.id
+          res.locals.feature_id = response.id
           return next()
         })
 
