@@ -6,7 +6,8 @@ module.exports = (req, res) => {
 
     try {
 
-      let shareable_url = 'https://garbagepla.net/show/' + res.locals.feature_id
+      let latlngs = res.locals.latlng.replace(', ', '/')
+      let shareable_url = 'https://garbagepla.net/#20/' + latlngs
       let message       = { text: 'Shareable url for the feature you just created: ' +  shareable_url }
 
       telegramBot.sendMessageTo(message, req.body.message.from.id)
