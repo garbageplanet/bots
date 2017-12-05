@@ -22,7 +22,7 @@ module.exports = (req, res, next) => {
     if ( !req.body.message.document ) {
 
       console.log('Image not sent as file.')
-      let error = new Error('You must send me an image file . Make sur to attach it as a file and not as a photo.')
+      let error = new Error('You must send me an image file . Make sure to attach it as a file and not as a photo.')
       return next(error)
     }
 

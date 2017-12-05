@@ -6,16 +6,26 @@
 Add `@litter_bot` to your contact list and send a geotagged jpeg photos to add it directly to the map at [garbagepla.net][5e71e578]
 
 ## Facebook messenger
-_in preparation_
+Send a message with an image to our page [@garbageplanet][41d31586].
 
 ## Twitter
+_in preparation_
+
+## Viber
+_in preparation_
+
+## WeChat
+_in preparation_
+
+## BBM
 _in preparation_
 
 ## Whatsapp
 _waiting for whatsapp public api_
 
-  [5e71e578]: https://garbagepla.net "Garbagepla.net"
-
 ## Todo
 
  - Create simple marker by sharing location with the bot
+
+ [5e71e578]: https://garbagepla.net "Garbagepla.net"
+ [41d31586]: https://fb.me/garbageplanet "@garbageplanet"

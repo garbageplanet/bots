@@ -10,7 +10,9 @@
   "keywords": [
     "bots",
     "garbageplanet",
-    "nodejs"
+    "nodejs",
+    "telegram",
+    "facebook messenger"
   ],
   "author": "adriennn",
   "license": "MIT",
@@ -27,7 +29,6 @@
     "botmaster-messenger": "^1.0.2",
     "botmaster-telegram": "^1.0.0",
     "botmaster-twitter-dm": "^1.0.0",
-    "colors": "^1.1.2",
     "compression": "^1.7.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.0",
@@ -37,9 +38,7 @@
     "express": "~4.14.1",
     "express-session": "^1.15.6",
     "express-validator": "^4.3.0",
-    "fast-exif": "^1.0.1",
     "helmet-csp": "^2.6.0",
-    "image-headers": "^0.3.3",
     "imgur": "^0.2.1",
     "morgan": "~1.7.0",
     "pg-promise": "^7.3.2",
