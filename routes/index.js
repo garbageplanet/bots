@@ -12,11 +12,13 @@ const webhook_endpoint = '/webhook' + process.env.BOTS_WEBHOOK_ENDPOINT_HASH
 
 // Receive data request, exract exif, upload to imgur, upload to dn and return shareable url
 
-router.post('/:platform/*', (req, res, next) => {
-  
+router.post('*', (req, res, next) => {
+
     console.log(`POST to bots/${params.platform}`)
 
-    res.locals.bot_type = params.platform
+    req.url.indexOf('messenger') > -1 ? res.locals.bot_type = 'messenger' : res.locals.bot_type = 'telegram'
+
+    console.log(`This is a ${res.locals.bot_type} bot`)
 
     return next()
 })
