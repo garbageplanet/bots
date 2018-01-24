@@ -9,9 +9,15 @@ const savetodb     = require(path.join(__dirname,'./../db'))
 
 module.exports = (req, res) => {
 
-  if ( res.locals.bot_type = 'messenger' ) {
+  if ( req.url.indexOf('messenger') > -1) {
 
-      
+    console.log('its a messenge', req.body)
+
+    let message   = { text: 'Well done, Potter.' }
+
+    messengerBot.sendMessageTo(message, req.body.message.from.id)
+
+    return res.sendStatus(200).end()
 
   } else {
 

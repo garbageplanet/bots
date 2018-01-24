@@ -54,8 +54,6 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
 
-  console.log('Req body in error', req)
-
   if ( !err.status || err.status !==403 ) {
 
     // Reply according to the bot type
