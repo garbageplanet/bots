@@ -6,6 +6,10 @@ imgur.setClientId(process.env.IMGUR_CLIENT_ID)
 imgur.setAPIUrl(process.env.IMGUR_API_URL)
 imgur.setCredentials(process.env.IMGUR_EMAIL, process.env.IMGUR_PWD, process.env.IMGUR_CLIENT_ID)
 
+/*
+ * Upload image to imgur and retrieve url
+ */
+
 // The fucking promised hell
 module.exports = (req, res, next) => {
 

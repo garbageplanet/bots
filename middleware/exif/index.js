@@ -2,31 +2,28 @@
 const path        = require('path')
 const rpn         = require('request-promise-native')
 const ExifImage   = require('exif').ExifImage
-const telegramBot = require(path.join(__dirname,'./../bots/telegram.js'))
+// const telegramBot = require(path.join(__dirname,'./../bots/telegram.js'))
 const dms2dec     = require('dms2dec')
 
 // const ImageHeaders = require('image-headers')
 // const fastExif = require('fast-exif')
+
+// TODO use http://botmasterai.com/documentation/latest/tutorials/using-fulfill.html
+// TODO drop express and use only botmaster http://botmasterai.com/documentation/v2.3.1/working-with-botmaster/botmaster-basics.html
+// so we can build custom dialogs and flows
 
 // The fucking promised hell
 module.exports = (req, res, next) => {
 
     console.log('hit image middleware: ', req.body)
 
-    if ( req.body.message.from.is_bot === true ) {
+    // Make sure the file size is not bigger than 12 mega bytes
+    if ( parseInt(req.body.message.document.file_size, 10) > 12000000 ) {
 
-      let error = new Error('We don\'t serve your kind here.')
+      let error = new Error('Your image is too large. Maximum size allowed is 12MB.')
       return next(error)
     }
 
-    if ( !req.body.message.document ) {
-
-      console.log('Image not sent as file.')
-      let error = new Error('You must send me an image file . Make sure to attach it as a file and not as a photo.')
-      return next(error)
-    }
-
-    // TODO check req.body.message.is_bot
     const file_id = 'https://api.telegram.org/bot' + process.env.TELEGRAM_API_TOKEN + '/getFile?file_id=' + req.body.message.document.file_id
 
     console.log('file_id url for telegram getFile', file_id)
@@ -50,8 +47,6 @@ module.exports = (req, res, next) => {
         let image_file = rpn(image_url, {encoding: null})
 
         .then((body) => {
-
-            console.log('Fetched image file')
 
             new ExifImage({ image : body }, (error, exifdata) => {
 
@@ -83,14 +78,7 @@ module.exports = (req, res, next) => {
                       // Convert GPS data from exif into decimal coordinates
                       let dc = dms2dec( exifdata.gps.GPSLatitude, exifdata.gps.GPSLatitudeRef, exifdata.gps.GPSLongitude, exifdata.gps.GPSLongitudeRef)
 
-                      // let latlng = []
-                      //     latlng.push(dc[0])
-                      //     latlng.push(dc[1])
-                      //
-                      // console.log('latlngs: ', JSON.stringify(latlng))
-
-                      // res.locals.latlng = latlng
-
+                      // Latlng format expected by backend "lat, lng"
                       res.locals.latlng = dc[0] + ', ' + dc[1]
 
                       return next()
@@ -108,7 +96,7 @@ module.exports = (req, res, next) => {
         .catch(err =>{
 
           console.log('Failed to retrieve image from Telegram API', err)
-          let error = new Error('There was a problem retrieving your image.')
+          let error = new Error('There was a problem retrieving your image. Please try again.')
           return next(error)
         })
     })
@@ -116,7 +104,7 @@ module.exports = (req, res, next) => {
     .catch((err) => {
 
       console.log('Failed telegram file api', err)
-      let error = new Error('There was a problem retrieving your image.')
+      let error = new Error('There was a problem retrieving your image. Please try again.')
       return next(error)
     })
 }

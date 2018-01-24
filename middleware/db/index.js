@@ -30,9 +30,9 @@ module.exports = (req, res, next) => {
             , formData: {
                 'image_url' : res.locals.imgur_url
               , 'latlng'    : res.locals.latlng
-              , 'todo'      : 1
-              , 'amount'    : 3
-              , 'type'      : 'robot'
+              , 'todo'      : res.locals.todo   || 1
+              , 'amount'    : res.locals.amount || 1
+              , 'type'      : res.locals.types  || 1
              }
         }
 

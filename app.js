@@ -1,7 +1,7 @@
                      require('dotenv').config()
 const express      = require('express')
 const path         = require('path')
-const compression = require('compression')
+const compression  = require('compression')
 const logger       = require('morgan')
 const cookieParser = require('cookie-parser')
 const bodyParser   = require('body-parser')
@@ -9,6 +9,7 @@ const csp          = require('helmet-csp')
 const index        = require('./routes/index')
 const app          = express()
 const telegramBot  = require(path.join(__dirname,'./middleware/bots/telegram.js'))
+const messengerBot = require(path.join(__dirname,'./middleware/bots/messenger.js'))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -36,6 +37,7 @@ app.use(csp({
 
     , imgSrc: [  "'self'"
                , 'https://api.telegram.org'
+               , 'https://'
             ]
   }
 }))
@@ -52,10 +54,32 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
 
+  console.log('Req body in error', req.body)
+
   if ( !err.status || err.status !==403 ) {
 
-    telegramBot.sendMessageTo({text: err.message}, req.body.message.from.id)
-    res.sendStatus(200).end()
+    // Reply according to the bot type
+    let bot_type = res.locals.bot_type
+
+    switch (bot_type) {
+
+        case 'telegram' :
+            telegramBot.sendMessageTo({text: err.message}, req.body.message.from.id)
+            res.sendStatus(200).end()
+            break
+
+        case 'messenger' :
+            messengerBot.sendMessageTo({text: err.message}, req.body.message.from.id)
+            res.sendStatus(200).end()
+            break
+
+        case 'twitter' :
+            res.sendStatus(200).end()
+            break
+
+        default: res.sendStatus(200).end()
+    }
+
 
   } else {
 
