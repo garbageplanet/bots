@@ -20,6 +20,8 @@
      return next(error)
    }
 
+   res.locals.bot_type = 'telegram'
+
    return next()
 
  }

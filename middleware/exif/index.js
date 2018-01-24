@@ -53,7 +53,7 @@ module.exports = (req, res, next) => {
                 if ( err ) {
 
                   console.log('Error getting exif data', err.message)
-                  let error = new Error('I could not parse the exif data, did you send a jpeg?')
+                  let error = new Error(err.message)
                   return next(error)
 
                 } else {
