@@ -15,6 +15,8 @@ module.exports = (req, res) => {
 
     console.log('its a messenge', req.body)
 
+    let body = req.body
+
     // Check the webhook event is from a Page subscription
     if (body.object === 'page') {
 
