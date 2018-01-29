@@ -9,15 +9,44 @@ const savetodb     = require(path.join(__dirname,'./../db'))
 
 module.exports = (req, res) => {
 
+  /* Test code for messenger bot */
+
   if ( req.url.indexOf('messenger') > -1) {
 
     console.log('its a messenge', req.body)
 
-    let message   = { text: 'Well done, Potter.' }
+    // Check the webhook event is from a Page subscription
+    if (body.object === 'page') {
 
-    messengerBot.sendMessageTo(message, req.body.message.from.id)
+      // Iterate over each entry - there may be multiple if batched
+      body.entry.forEach(function(entry) {
 
-    return res.sendStatus(200).end()
+        // Get the webhook event. entry.messaging is an array, but
+        // will only ever contain one event, so we get index 0
+        let webhook_event = entry.messaging[0];
+        console.log(webhook_event);
+
+                // Gets the body of the webhook event
+        let webhook_event = entry.messaging[0];
+        console.log(webhook_event);
+
+        // Get the sender PSID
+        let sender_psid = webhook_event.sender.id;
+        console.log('Sender PSID: ' + sender_psid);
+
+      });
+
+
+      let message   = { text: 'Well done, Potter.' }
+
+      messengerBot.sendMessageTo(message, sender_psid)
+
+      return res.sendStatus(200).end()
+
+    } else {
+      // Return a '404 Not Found' if event is not from a page subscription
+      res.sendStatus(404).end();
+    }
 
   } else {
 
