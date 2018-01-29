@@ -16,9 +16,9 @@ router.use((req, res, next) => {
 
   // Get the two first characters after the /bots/ in url so we know which bot is called
   // note that we could use botmaster to do this but since we mount our own express app, the bot is only used to reply
-  let type = req.url.substr(6, 2)
+  let type = req.url.substr(1, 2)
 
-  console.log('Request', req)
+//   console.log('Request', req)
 
   console.log('type:', type)
 
