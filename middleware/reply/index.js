@@ -30,7 +30,7 @@ const request      = require('request')
      } else {
        console.error("Unable to send message:" + err)
      }
-   });
+   })
  }
 
  function handleMessage(sender_psid, received_message) {
@@ -84,6 +84,8 @@ module.exports = (req, res) => {
 
             return res.sendStatus(404).end()
         }
+
+      }
 
       // messengerBot.sendMessageTo(message, sender_psid)
 
