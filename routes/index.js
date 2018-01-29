@@ -12,7 +12,7 @@ const webhook_endpoint = '/webhook' + process.env.BOTS_WEBHOOK_ENDPOINT_HASH
 
 // Receive data request, exract exif, upload to imgur, upload to dn and return shareable url
 
-router.use((req, res, next) {
+router.use((req, res, next) => {
 
   // Get the two first characters after the /bots/ in url so we know which bot is called
   // note that we could use botmaster to do this but since we mount our own express app, the bot is only used to reply
