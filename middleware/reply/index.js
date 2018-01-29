@@ -85,7 +85,7 @@ module.exports = (req, res) => {
             return res.sendStatus(404).end()
         }
 
-      }
+      })
 
       // messengerBot.sendMessageTo(message, sender_psid)
 
