@@ -23,18 +23,13 @@ module.exports = (req, res) => {
 
         // Get the webhook event. entry.messaging is an array, but
         // will only ever contain one event, so we get index 0
-        let webhook_event = entry.messaging[0];
-        console.log(webhook_event);
-
-                // Gets the body of the webhook event
-        let webhook_event = entry.messaging[0];
-        console.log(webhook_event);
+        let webhook_event = entry.messaging[0]
 
         // Get the sender PSID
-        let sender_psid = webhook_event.sender.id;
-        console.log('Sender PSID: ' + sender_psid);
+        let sender_psid = webhook_event.sender.id
+        console.log('Sender PSID: ' + sender_psid)
 
-      });
+      })
 
 
       let message   = { text: 'Well done, Potter.' }
