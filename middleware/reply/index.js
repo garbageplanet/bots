@@ -20,7 +20,7 @@ const request      = require('request')
    }
 
    request({
-     "uri": "https://graph.facebook.com/v2.6/me/messages",
+     "uri": "https://graph.facebook.com/v2.6/" + process.env.FB_PAGEID,
      "qs": { "access_token": process.env.FB_MESSENGER_PAGE_ACCESS_TOKEN },
      "method": "POST",
      "json": request_body
@@ -48,6 +48,8 @@ module.exports = (req, res) => {
 
       // Iterate over each entry - there may be multiple if batched
       body.entry.forEach(function(entry) {
+
+        console.log('Entry: ' + entry)
 
         // Get the webhook event. entry.messaging is an array, but
         // will only ever contain one event, so we get index 0
