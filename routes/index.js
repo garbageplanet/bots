@@ -18,6 +18,10 @@ router.use((req, res, next) => {
   // note that we could use botmaster to do this but since we mount our own express app, the bot is only used to reply
   let type = req.url.substr(6, 2)
 
+  console.log('Request', req)
+
+  console.log('type:', type)
+
   switch (type) {
 
     case 'me' : res.locals.bot_type = 'messenger'
