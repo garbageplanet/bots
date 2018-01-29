@@ -26,7 +26,7 @@ const request      = require('request')
      "json": request_body
    }, (err, res, body) => {
      if (!err) {
-       console.log('message sent!')
+       console.log('message sent!', res)
      } else {
        console.error("Unable to send message:" + err)
      }
@@ -78,16 +78,19 @@ module.exports = (req, res) => {
         // pass the event to the appropriate handler function
         if ( webhook_event.message ) {
 
-          handleMessage(sender_psid, webhook_event.message)
+          let message = {
+            "text": `You sent the message: "${webhook_event.message.text}". You need to send me an image.`
+          }
+
+          messengerBot.sendMessageTo(message, entry.messaging[0].sender.id)
+          // handleMessage(sender_psid, webhook_event.message)
 
         } else {
 
-            return res.sendStatus(404).end()
+            return res.sendStatus(202).end()
         }
 
       })
-
-      // messengerBot.sendMessageTo(message, sender_psid)
 
       return res.sendStatus(200).end()
 

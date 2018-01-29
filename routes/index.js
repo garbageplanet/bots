@@ -12,6 +12,36 @@ const webhook_endpoint = '/webhook' + process.env.BOTS_WEBHOOK_ENDPOINT_HASH
 
 // Receive data request, exract exif, upload to imgur, upload to dn and return shareable url
 
+router.use((req, res, next) {
+
+  // Get the two first characters after the /bots/ in url so we know which bot is called
+  // note that we could use botmaster to do this but since we mount our own express app, the bot is only used to reply
+  let type = req.url.substr(6, 2)
+
+  switch (type) {
+
+    case 'me' : res.locals.bot_type = 'messenger'
+    break
+    case 'te' : res.locals.bot_type = 'telegram'
+    break
+    case 'tw' : res.locals.bot_type = 'twitter'
+    break
+    case 'wh' : res.locals.bot_type = 'whatsapp'
+    break
+    case 'vi' : res.locals.bot_type = 'viber'
+    break
+    case 'we' : res.locals.bot_type = 'wechat'
+    break
+    case 'bb' : res.locals.bot_type = 'bbm'
+    break
+    default : res.locals.bot_type = null
+
+  }
+
+  next()
+
+})
+
 router.post('/telegram' + webhook_endpoint, initConvo, getExif, uploadToImgur, /*setOptions,*/ saveToDb, replyToMessage)
 
 router.post('/messenger' + webhook_endpoint, replyToMessage)

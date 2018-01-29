@@ -4,9 +4,15 @@
 
  module.exports = (req, res, next) => {
 
-   res.locals.bot_type = 'telegram'
+   if ( !res.locals.bot_type ) {
 
-   if ( req.body.message.from.is_bot === true ) {
+     console.log('No bot type.', req.body)
+
+     let error = new Error('Cant touch dis.')
+     return next(error)
+   }
+
+   if ( res.locals.bot_type === 'telegram' && req.body.message.from.is_bot === true ) {
 
      console.log('Message is from bot.', req.body)
 
@@ -14,7 +20,7 @@
      return next(error)
    }
 
-   if ( !req.body.message.document ) {
+   if ( res.locals.bot_type === 'telegram' && !req.body.message.document ) {
 
      console.log('Image not sent as file.', req.body)
 

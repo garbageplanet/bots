@@ -1,6 +1,6 @@
-                    require('dotenv').config()
-const path        = require('path')
-const imgur       = require('imgur')
+              require('dotenv').config()
+const path  = require('path')
+const imgur = require('imgur')
 
 imgur.setClientId(process.env.IMGUR_CLIENT_ID)
 imgur.setAPIUrl(process.env.IMGUR_API_URL)
@@ -21,18 +21,18 @@ module.exports = (req, res, next) => {
     .then(response => {
 
         console.log('imgur upload api response', response)
-        // ouch, the backend/fontend bugs with https
+        // fixed in frontend, no need to replace https once garbageplanet/frontend/navigo branch is merged
         let link = response.data.link
         let httplink = link.replace('https','http')
         res.locals.imgur_url = httplink
         return next()
 
-      })
+    })
 
     .catch(err => {
 
         console.error('Failed to upload to imgur', err.message)
         let error = new Error('Failed to upload your image to storage. My bad.')
         return next(error)
-      })
+    })
 }

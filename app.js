@@ -31,16 +31,26 @@ app.use(csp({
                   , 'http://127.0.0.1:7000'
                   , 'https://' + process.env.APP_WEB_URL
                   , 'https://api.telegram.org'
+                  , 'https://www.facebook.com'
                 ]
 
     , scriptSrc: [  "'self'" ]
 
     , imgSrc: [  "'self'"
                , 'https://api.telegram.org'
-               , 'https://'
+               , 'https://www.facebook.com'
             ]
   }
 }))
+
+const limiter = new Limiter({
+    windowMs: process.env.APP_REQ_WINDOW
+  , max: process.env.APP_REQ_LIMIT
+  , delayMs: process.env.APP_REQ_DELAY
+})
+
+//  Apply rate limits to all requests
+app.use(limiter);
 
 app.use('/bots', index)
 
