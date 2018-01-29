@@ -20,7 +20,7 @@ const request      = require('request')
    }
 
    request({
-     "uri": "https://graph.facebook.com/v2.6/" + process.env.FB_PAGEID,
+     "uri": "https://graph.facebook.com/v2.6/me/messages" + process.env.FB_PAGEID,
      "qs": { "access_token": process.env.FB_MESSENGER_PAGE_ACCESS_TOKEN },
      "method": "POST",
      "json": request_body
@@ -28,10 +28,27 @@ const request      = require('request')
      if (!err) {
        console.log('message sent!')
      } else {
-       console.error("Unable to send message:" + err);
+       console.error("Unable to send message:" + err)
      }
    });
  }
+
+ function handleMessage(sender_psid, received_message) {
+
+  let response;
+
+  // Check if the message contains text
+  if ( received_message.text ) {
+
+    // Create the payload for a basic text message
+    response = {
+      "text": `You sent the message: "${received_message.text}". You need to send me an image.`
+    }
+  }
+
+  // Sends the response message
+  callSendAPI(sender_psid, response);
+}
 
 module.exports = (req, res) => {
 
@@ -44,26 +61,29 @@ module.exports = (req, res) => {
     let body = req.body
 
     // Check the webhook event is from a Page subscription
-    if (body.object === 'page') {
+    if ( body.object === 'page' ) {
 
       // Iterate over each entry - there may be multiple if batched
       body.entry.forEach(function(entry) {
 
-        console.log('Entry: ' + entry)
-
-        // Get the webhook event. entry.messaging is an array, but
-        // will only ever contain one event, so we get index 0
+        // Gets the body of the webhook event
         let webhook_event = entry.messaging[0]
+        console.log(webhook_event)
 
         // Get the sender PSID
         let sender_psid = webhook_event.sender.id
         console.log('Sender PSID: ' + sender_psid)
 
-      })
+        // Check if the event is a message or postback and
+        // pass the event to the appropriate handler function
+        if ( webhook_event.message ) {
 
-      let message   = { text: 'Well done, Potter.' }
+          handleMessage(sender_psid, webhook_event.message)
 
-      callSendAPI(sender_psid, message)
+        } else {
+
+            return res.sendStatus(404).end()
+        }
 
       // messengerBot.sendMessageTo(message, sender_psid)
 
