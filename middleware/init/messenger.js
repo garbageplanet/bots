@@ -4,7 +4,7 @@
 
 module.exports = (req, res, next) => {
 
-  if ( !res.locals.bot_type || req.body.object !== 'page' ) {
+  if ( req.body.object !== 'page' ) {
 
     console.log('No bot type or not sent through the facebook Page.', req.body)
 
