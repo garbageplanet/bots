@@ -19,7 +19,7 @@ module.exports = (req, res, next) => {
 
     console.log('No attachments.', req.body)
 
-    let error = new Error('I am a simple minde. Send pic.')
+    let error = new Error('I am a visual mind. Send me a pic.')
     return next(error)
   }
 
@@ -30,8 +30,6 @@ module.exports = (req, res, next) => {
     let error = new Error('Make sure to attach the image you are sending as a file and not as a photo.')
     return next(error)
   }
-
-
 
   // TODO https://developers.facebook.com/docs/messenger-platform/send-messages/sender-actions
   // TODO https://developers.facebook.com/docs/messenger-platform/send-messages/#messaging_types

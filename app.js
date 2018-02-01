@@ -12,9 +12,6 @@ const app          = express()
 const telegramBot  = require(path.join(__dirname,'./middleware/bots/telegram.js'))
 const messengerBot = require(path.join(__dirname,'./middleware/bots/messenger.js'))
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'pug')
 app.set('trust proxy', '127.0.0.1')
 
 app.use(compression())
