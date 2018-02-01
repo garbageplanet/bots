@@ -20,6 +20,8 @@ router.use((req, res, next) => {
   // we can only use the botmaster for the reply
   let type = req.url.substr(1, 2)
 
+  console.log(`URL abbreviation is ${type}`)
+
   switch (type) {
 
     case 'me' : res.locals.bot_type = 'messenger'
@@ -54,7 +56,7 @@ router.use((req, res, next) => {
 
 router.post(`/telegram${webhook_endpoint}`, initConvo.telegram, getImageUrl, extractExif, uploadToImgur, saveToDb, replyToMessage.telegram)
 
-router.post(`/messenger${webhook_endpoint}`,initConvo.messenger, getImageUrl, extractExif, uploadToImgur, saveToDb, replyToMessage.messenger)
+router.post(`/messenger${webhook_endpoint}`, initConvo.messenger, getImageUrl, extractExif, uploadToImgur, saveToDb, replyToMessage.messenger)
 
 // Authorization mechanism for Facebook Messenger API, this needs to be continuously testable
 router.get(`/messenger${webhook_endpoint}`, verifyApp)
