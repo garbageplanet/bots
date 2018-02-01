@@ -4,8 +4,8 @@
 
 module.exports = (req, res, next) => {
 
-  console.log('Messenger entry: ', req.body.entry[0])
-  console.log('Messenger messaging: ', req.body.entry[0].messaging[0])
+  // console.log('Messenger entry: ', req.body.entry[0])
+  // console.log('Messenger messaging: ', req.body.entry[0].messaging[0])
 
   if ( req.body.object !== 'page' ) {
 
@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
     return next(error)
   }
 
-  if ( req.body.entry[0].messaging[0].message.attachments[0].type === 'image' && req.body.entry[0].messaging[0].message.attachments[0].type !== 'file') {
+  if ( req.body.entry[0].messaging[0].message.attachments[0].type !== 'file') {
 
     console.log('Image not sent as file.', req.body)
 
