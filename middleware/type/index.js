@@ -10,9 +10,9 @@ module.exports = (req, res, next) => {
 
   switch (type) {
 
-    case 'me' : res.locals.sender = req.body.entry[0].messaging[0].sender.id
+    case 'messenger' : res.locals.sender = req.body.entry[0].messaging[0].sender.id
     break
-    case 'te' : res.locals.sender = req.body.message.from.id
+    case 'telegram' : res.locals.sender = req.body.message.from.id
     break
     default   : res.locals.sender = null
   }
