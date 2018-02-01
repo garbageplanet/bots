@@ -4,6 +4,9 @@
 
 module.exports = (req, res, next) => {
 
+  console.log('Messenger entry: ', req.body.entry[0])
+  console.log('Messenger messaging: ', req.body.entry[0].messaging[0])
+
   if ( req.body.object !== 'page' ) {
 
     console.log('No bot type or not sent through the facebook Page.', req.body)
