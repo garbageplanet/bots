@@ -7,10 +7,17 @@ module.exports = (req, res, next) => {
 
   console.log(`URL abbreviation is ${type}`)
 
+  console.log(req.body)
+
   switch (type) {
 
     case 'me' : res.locals.bot_type = 'messenger'
-                res.locals.sender = req.body.entry[0].sender.id
+
+                // if ( req.body.entry[0].messaging[0].message.is_echo ) {
+                //   res.end();
+                // }
+
+                res.locals.sender = req.body.entry[0].messaging[0].sender.id
                 console.log('Messenger entry: ', req.body.entry[0])
                 console.log('Messenger messaging: ', req.body.entry[0].messaging[0])
                 // console.log('Messenger entry: ', req.body.entry[0])

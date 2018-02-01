@@ -34,3 +34,57 @@ module.exports = (req, res, next) => {
 // req.body.entry[0].messaging[0].sender.id
 // req.body.entry[0].messaging[0].message.attachments[0].payload.url
 // req.body.entry[0].messaging[0].message.attachments[0].type === 'file'
+
+/*{
+  "sender":{
+    "id":"<PSID>"
+  },
+  "recipient":{
+    "id":"<PAGE_ID>"
+  },
+  "timestamp":1458692752478,
+  "message":{
+    "mid":"mid.1458696618141:b4ef9d19ec21086067",
+    "attachments":[
+      {
+        "type":"file",
+        "payload":{
+          "url":"<IMAGE_URL>"
+        }
+      },
+      {
+        "type":"location",
+        "payload":{
+          "coordinates":{
+            "lat": 0.0000,
+            "long": 0.0000
+          }
+        }
+      }
+    ]
+  }
+}*/
+
+/*
+{
+  "object":"page",
+  "entry":[
+    {
+      "id":"<PAGE_ID>",
+      "time":1458692752478,
+      "messaging":[
+        {
+          "sender":{
+            "id":"<PSID>"
+          },
+          "recipient":{
+            "id":"<PAGE_ID>"
+          },
+
+          ...
+        }
+      ]
+    }
+  ]
+}
+*/
