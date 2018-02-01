@@ -16,7 +16,7 @@ module.exports = (req, res, next) => {
 
     // URL format expected by the navigo-js routerin web app
     let share_url = 'https://garbagepla.net/#/s/garbage/' + res.locals.feature_id + '/' + latlng[0] + '/' + latlng[1]
-    let message   = { text: 'Shareable url for the feature you just created: ' +  share_url }
+    let message   = { text: `Thank you for your submission! You can now share this link ${share_url} with your friends!` }
 
     telegramBot.sendMessageTo(message, res.locals.sender)
     return res.sendStatus(200).end()

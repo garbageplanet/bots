@@ -56,9 +56,9 @@ module.exports = (req, res, next) => {
 
   // URL format expected by the navigo-js routerin web app
   let share_url = 'https://garbagepla.net/#/s/garbage/' + res.locals.feature_id + '/' + latlng[0] + '/' + latlng[1]
-  let message   = { text: `Shareable url for the feature you just created:${share_url}`}
+  let message   = { text: `Thank you for your submission! You can now share this link ${share_url} with your friends!`}
 
-  messengerBot.sendMessageTo(message, sender_psid)
+  messengerBot.sendMessageTo(message, res.locals.sender)
   return res.sendStatus(200).end()
 
   // Check if the event is a message or postback and
@@ -77,7 +77,5 @@ module.exports = (req, res, next) => {
   //   next(error)
   //
   // }
-
-  return res.sendStatus(202).end()
 
 }
