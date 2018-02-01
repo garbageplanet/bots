@@ -1,14 +1,6 @@
 // Init the conversation with telegram user
 module.exports = (req, res, next) => {
 
-  if ( !res.locals.bot_type ) {
-
-    console.log('No bot type.', req.body)
-
-    let error = new Error('Cant touch dis.')
-    return next(error)
-  }
-
   if ( req.body.message.from.is_bot === true ) {
 
     console.log('Message is from bot.', req.body)

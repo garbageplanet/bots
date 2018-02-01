@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
   // we can only use the botmaster for the reply
 //   let type = req.url.substr(1, 2)
 
-  let type = req.url.split('/').shift()
+  let type = req.url.slice(1).split('/').shift()
   console.log(req.url.split('/'))
   console.log(type)
   res.locals.bot_type = type
@@ -35,6 +35,10 @@ module.exports = (req, res, next) => {
 
   //console.log(`Sender id is ${res.locals.sender}`)
   console.log(`Sender is on ${res.locals.bot_type}`)
+
+  if ( !type ) {
+    return res.sendStatus(404).end()
+  }
 
   return next()
 
