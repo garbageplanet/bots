@@ -57,6 +57,7 @@ app.use('/bots', index)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+  
   let err = new Error('Forbidden')
   err.status = 403
   next(err)
@@ -68,17 +69,15 @@ app.use(function(err, req, res, next) {
   if ( !err.status || err.status !==403 ) {
 
     // Reply according to the bot type
-    let bot_type = res.locals.bot_type
-
-    switch (bot_type) {
+    switch (res.locals.bot_type) {
 
         case 'telegram' :
-            telegramBot.sendMessageTo({text: err.message}, req.body.message.from.id)
+            telegramBot.sendMessageTo({text: err.message}, res.locals.sender)
             res.sendStatus(200).end()
             break
 
         case 'messenger' :
-            messengerBot.sendMessageTo({text: err.message}, req.body.message.from.id)
+            messengerBot.sendMessageTo({text: err.message}, res.locals.sender)
             res.sendStatus(200).end()
             break
 
@@ -88,7 +87,6 @@ app.use(function(err, req, res, next) {
 
         default: res.sendStatus(200).end()
     }
-
 
   } else {
 
