@@ -5,7 +5,10 @@ module.exports = (req, res, next) => {
   // we can only use the botmaster for the reply
 //   let type = req.url.substr(1, 2)
 
-  res.locals.bot_type = req.url.split('/').shift()
+  let type = req.url.split('/').shift()
+  console.log(req.url.split('/'))
+  console.log(type)
+  res.locals.bot_type = type
 
   // switch (type) {
   //
