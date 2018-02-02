@@ -5,9 +5,10 @@ const MessengerBot = require('botmaster-messenger')
 
 const messengerSettings = {
     credentials: {
-        verifyToken      : process.env.FB_MESSENGER_VERIFY_TOKEN
-      , pageToken        : process.env.FB_MESSENGER_PAGE_ACCESS_TOKEN
-      , fbAppSecret      : process.env.FB_MESSENGER_APP_SECRET
+        verifyToken : process.env.FB_MESSENGER_VERIFY_TOKEN
+      , pageToken   : process.env.FB_MESSENGER_PAGE_ACCESS_TOKEN
+      , fbAppSecret : process.env.FB_MESSENGER_APP_SECRET
+      , clientToken : process.env.FB_CLIENT_TOKEN
     }
   , webhookEndpoint: '/webhook' + process.env.BOTS_WEBHOOK_ENDPOINT_HASH,
 }

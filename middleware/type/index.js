@@ -20,7 +20,7 @@ module.exports = (req, res, next) => {
   //console.log(`Sender id is ${res.locals.sender}`)
   console.log(`Sender is on ${res.locals.bot_type}`)
 
-  if ( !type ) {
+  if ( !type || !res.locals.sender ) {
     return res.sendStatus(404).end()
   }
 
