@@ -3,6 +3,8 @@ const rpn = require('request-promise-native')
 
 module.exports = (req, res, next) => {
 
+    // TODO use json: true
+
     rpn({  method: 'POST',
            url: 'https://' + process.env.APP_WEB_URL + ':' + process.env.APP_WEB_PORT + '/api/authenticate'
          , formData: {
@@ -47,16 +49,14 @@ module.exports = (req, res, next) => {
 
         .catch(err => {
           // Failed to post to API
-          console.log('Failed to submit data to api', err)
-          let error = new Error('Something went wrong. My bad')
+          let error = new Error(`Failed to save the image to the backend: ${err.message}`)
           return next(error)
         })
     })
 
     .catch((err) => {
       // Auth failed
-      console.log('Failed api auth', err)
-      let error = new Error('Something went wrong. My bad')
+      let error = new Error(`Failed to save the image to the backend: ${err.message}`)
       next(error)
     })
 }

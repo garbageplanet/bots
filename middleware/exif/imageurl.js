@@ -39,8 +39,7 @@ module.exports = (req, res, next) => {
         return next()
 
     }).catch(err => {
-      console.log('Error getting telegram image url', err.message)
-      let error = new Error (err.message)
+      let error = new Error (`Error getting telegram image url: ${err.message}`)
       return next(error)
     })
   }

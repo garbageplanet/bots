@@ -12,6 +12,8 @@ const dms2dec   = require('dms2dec')
 
 module.exports = (req, res, next) => {
 
+  // TODO use json: true
+
   // Fetch the actual image file from the url
   rpn(res.locals.image_url, {encoding: null})
 
@@ -21,8 +23,7 @@ module.exports = (req, res, next) => {
 
         if ( err ) {
 
-          console.log('Error reading exif data', err.message)
-          let error = new Error(err.message)
+          let error = new Error(`Error reading exif data: ${err.message}`)
           return next(error)
 
         } else {
