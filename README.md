@@ -8,6 +8,9 @@ Add `@litter_bot` to your contact list and send a geotagged jpeg images as files
 ## Facebook messenger
 Send a message with an image to our page [@garbageplanet][41d31586].
 
+## Skype Lite & Cortana
+_in preparation_
+
 ## Twitter
 _in preparation_
 

@@ -12,7 +12,7 @@ const app          = express()
 const telegramBot  = require(path.join(__dirname,'./middleware/bots/telegram.js'))
 const messengerBot = require(path.join(__dirname,'./middleware/bots/messenger.js'))
 
-app.set('trust proxy', '127.0.0.1')
+app.set('trust proxy', process.env.APP_URL)
 
 app.use(compression())
 app.use(logger('dev'))
@@ -26,7 +26,7 @@ app.use(csp({
                   ]
 
     , connectSrc: [  "'self'"
-                  , 'http://127.0.0.1:7000'
+                  , `http://${process.env.APP_URL}:${process.env.PORT}`
                   , 'https://' + process.env.APP_WEB_URL
                   , 'https://api.telegram.org'
                   , 'https://www.facebook.com'
@@ -92,6 +92,6 @@ app.use(function(err, req, res, next) {
 
 })
 
-console.log('Bots app started on port 7000')
+console.log(`Bots app started on port ${process.env.PORT}`)
 
 module.exports = app

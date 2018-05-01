@@ -14,6 +14,7 @@ const webhook_endpoint = '/webhook' + process.env.BOTS_WEBHOOK_ENDPOINT_HASH
 // Receive data request, exract exif, upload to imgur, upload to dn and return shareable url
 router.post(`/telegram${webhook_endpoint}`, checkType, initConvo.telegram, getImageUrl, extractExif, uploadToImgur, saveToDb, replyToMessage.telegram)
 router.post(`/messenger${webhook_endpoint}`, checkType, initConvo.messenger, getImageUrl, extractExif, uploadToImgur, saveToDb, replyToMessage.messenger)
+router.post(`/skype${webhook_endpoint}`, checkType, initConvo.skype, getImageUrl, extractExif, uploadToImgur, saveToDb, replyToMessage.messenger)
 
 // Authorization mechanism for Facebook Messenger API, this needs to be continuously testable
 router.get(`/messenger${webhook_endpoint}`, verifyApp)
