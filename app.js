@@ -12,7 +12,7 @@ const app          = express()
 const telegramBot  = require(path.join(__dirname,'./middleware/bots/telegram.js'))
 const messengerBot = require(path.join(__dirname,'./middleware/bots/messenger.js'))
 
-app.set('trust proxy', process.env.APP_URL)
+app.set('trust proxy', process.env.APP_LOCALHOST)
 
 app.use(compression())
 app.use(logger('dev'))

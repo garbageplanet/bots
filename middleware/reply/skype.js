@@ -1,6 +1,6 @@
-                    require('dotenv').config
-const path        = require('path')
-const skypeBot = require(path.join(__dirname,'./../bots/skype.js'))
+                       require('dotenv').config
+const path           = require('path')
+// const connector = require(path.join(__dirname,'./../bots/skype'))
 
 /*
 * Reply to telegram user if everything is ok

@@ -1,16 +1,11 @@
-require('dotenv').config()
+                require('dotenv').config()
+const builder = require('botbuilder')
 
-const path      = require('path')
-const SkypeBot  = require('botmaster-telegram')
-const botmaster = require(path.join(__dirname,'./botmaster.js'))
-
-const skypeSettings = {
-    credentials     : { authToken: process.env.AZURE_API_TOKEN }
-  , webhookEndpoint : '/webhook' + process.env.BOTS_WEBHOOK_ENDPOINT_HASH
+const config = {
+    appId: process.env.AZURE_BOT_APPID,
+    appPassword: process.env.AZURE_BOT_APPPWD
 }
 
-const skypeBot = new SkypeBot(skypeSettings)
+const connector = new builder.ChatConnector(config)
 
-botmaster.addBot(skypeBot)
-
-module.exports = skypeBot
+module.exports = connector
