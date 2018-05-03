@@ -8,4 +8,10 @@ const config = {
 
 const connector = new builder.ChatConnector(config)
 
+var bot = new builder.UniversalBot(connector, function (session) {
+
+  session.send("You said: %s", session.message.text)
+
+});
+
 module.exports = connector
