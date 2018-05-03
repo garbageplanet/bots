@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
 
   // TODO check if menu_callback
 
-  console.log('Skype bot replyreq.body: ' req.body)
+  console.log('Skype bot reply req.body: ', req.body)
 
   try {
 
