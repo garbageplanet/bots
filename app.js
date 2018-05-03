@@ -27,8 +27,9 @@ app.use(csp({
 
     , connectSrc: [  "'self'"
                   , `http://${process.env.APP_URL}:${process.env.PORT}`
-                  , 'https://' + process.env.APP_WEB_URL
+                  , `https://${process.env.APP_WEB_URL}`
                   , 'https://api.telegram.org'
+                  , 'https://www.facebook.com'
                   , 'https://www.facebook.com'
                 ]
 
@@ -79,6 +80,10 @@ app.use(function(err, req, res, next) {
             break
 
         case 'twitter' :
+            res.sendStatus(200).end()
+            break
+
+        case 'skype' :
             res.sendStatus(200).end()
             break
 
