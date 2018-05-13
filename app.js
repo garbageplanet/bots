@@ -9,8 +9,7 @@ const bodyParser   = require('body-parser')
 const csp          = require('helmet-csp')
 const index        = require('./routes/index')
 const app          = express()
-const telegramBot  = require(path.join(__dirname,'./middleware/bots/telegram.js'))
-const messengerBot = require(path.join(__dirname,'./middleware/bots/messenger.js'))
+const errors       = require(path.join(__dirname,'./middleware/errors'))
 
 app.set('trust proxy', process.env.APP_LOCALHOST)
 
@@ -30,7 +29,9 @@ app.use(csp({
                   , `https://${process.env.APP_WEB_URL}`
                   , 'https://api.telegram.org'
                   , 'https://www.facebook.com'
-                  , 'https://www.facebook.com'
+                  , 'https://ran.eu.everynet.io'
+                  , 'https://ns.eu.everynet.io'
+                  , process.env.AZURE_SRV_ADDRESS
                 ]
 
     , scriptSrc: [  "'self'" ]
@@ -62,41 +63,8 @@ app.use(function(req, res, next) {
 })
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(errors)
 
-  if ( !err.status || err.status !==403 ) {
-
-    // Reply according to the bot type
-    switch (res.locals.bot_type) {
-
-        case 'telegram' :
-            telegramBot.sendMessageTo({text: err.message}, res.locals.sender)
-            res.sendStatus(200).end()
-            break
-
-        case 'messenger' :
-            messengerBot.sendMessageTo({text: err.message}, res.locals.sender)
-            res.sendStatus(200).end()
-            break
-
-        case 'twitter' :
-            res.sendStatus(200).end()
-            break
-
-        case 'skype' :
-            res.sendStatus(200).end()
-            break
-
-        default: res.sendStatus(200).end()
-    }
-
-  } else {
-
-    res.sendStatus(err.status).end()
-  }
-
-})
-
-console.log(`Bots app started on port ${process.env.PORT}`)
+console.log(`Bots app started on port ${process.env.APP_PORT}`)
 
 module.exports = app

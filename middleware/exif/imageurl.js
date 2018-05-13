@@ -28,13 +28,13 @@ module.exports = (req, res, next) => {
     }
 
     // With telegram we need to query the API to get the actual file url
-    let file_id = 'https://api.telegram.org/bot' + process.env.TELEGRAM_API_TOKEN + '/getFile?file_id=' + req.body.message.document.file_id
+    let file_id = `https://api.telegram.org/bot${process.env.TELEGRAM_API_TOKEN}/getFile?file_id=${req.body.message.document.file_id}`
 
     rpn({ method: 'POST', uri: file_id }).then((body) => {
 
         let parsed = JSON.parse(body)
 
-        res.locals.image_url = 'https://api.telegram.org/file/bot' + process.env.TELEGRAM_API_TOKEN + '/' + parsed.result.file_path
+        res.locals.image_url = `https://api.telegram.org/file/bot${process.env.TELEGRAM_API_TOKEN}/${parsed.result.file_path}`
 
         return next()
 

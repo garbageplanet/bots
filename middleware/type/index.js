@@ -14,7 +14,7 @@ module.exports = (req, res, next) => {
     break
     case 'telegram' : res.locals.sender = req.body.message.from.id
     break
-    case 'skype' : console.log("Hit msft bot: ", req.body)// res.locals.sender = req.body.message.from.id
+    case 'skype' : res.locals.sender = req.body.from.id
     break
     default   : res.locals.sender = null
   }

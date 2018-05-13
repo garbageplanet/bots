@@ -1,5 +1,7 @@
 const ExifImage = require('exif').ExifImage
 const dms2dec   = require('dms2dec')
+const rpn       = require('request-promise-native')
+
 // Exif gps format
 // gps:
 // { ...,
@@ -45,5 +47,11 @@ module.exports = (req, res, next) => {
           return next()
         }
     })
+  }).catch(err => {
+
+    console.log(`Error fetching image data in extract.js: ${err}`)
+    let error = new Error(`Error fetching image data: ${err}`)
+
+    return next(error)
   })
 }

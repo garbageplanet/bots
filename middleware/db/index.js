@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
     // TODO use json: true
 
     rpn({  method: 'POST',
-           url: 'https://' + process.env.APP_WEB_URL + ':' + process.env.APP_WEB_PORT + '/api/authenticate'
+           url: `https://${process.env.APP_WEB_URL}:${process.env.APP_WEB_PORT }/api/authenticate`
          , formData: {
             email    : process.env.APP_EMAIL
           , password : process.env.APP_MDP
@@ -26,7 +26,7 @@ module.exports = (req, res, next) => {
         }
 
         let options = {
-              url: 'https://' +  process.env.APP_WEB_URL + ':' + process.env.APP_WEB_PORT + '/api/trashes'
+              url: `https://${process.env.APP_WEB_URL}:${process.env.APP_WEB_PORT }/api/trashes`
             , method: 'POST'
             , headers: headers
             , formData: {
